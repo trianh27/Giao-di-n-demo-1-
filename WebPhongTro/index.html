@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tìm Trọ Nhanh — Thuê phòng trọ, căn hộ mini, nhà nguyên căn</title>
+  <meta name="description" content="Website tìm và thuê phòng trọ/căn hộ mini nhanh chóng. Lọc theo giá, diện tích, tiện ích; xem ảnh và gọi chủ trọ chỉ với một chạm." />
+  <style>
+    :root{
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #e5e7eb;
+      --brand: #4f46e5; /* indigo-600 */
+      --accent: #111827;
+      --success: #16a34a;
+      --chip-bg: #eef2ff;
+      --chip-text: #3730a3;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root{
+        --bg: #0a0a0b;
+        --card: #0f1115;
+        --text: #f8fafc;
+        --muted: #9aa3b2;
+        --border: #1f2430;
+        --accent: #f3f4f6;
+        --chip-bg: #1d1f2f;
+        --chip-text: #c7d2fe;
+      }
+      img{filter: brightness(0.95);}  
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,'Noto Sans',sans-serif;background:var(--bg);color:var(--text);}
+    a{color:inherit;text-decoration:none}
+    .container{max-width:1160px;margin:0 auto;padding:0 16px}
+
+    /* Header */
+    header{position:sticky;top:0;z-index:30;background:color-mix(in oklab, var(--card) 92%, transparent);backdrop-filter:saturate(1.2) blur(6px);border-bottom:1px solid var(--border)}
+    .brand{display:flex;align-items:center;gap:10px}
+    .brand-badge{width:36px;height:36px;border-radius:12px;background:var(--brand)}
+    .brand-name{font-weight:900;letter-spacing:.2px}
+    .header-row{display:flex;align-items:center;gap:12px;justify-content:space-between;padding:12px 0}
+    .search{position:relative;flex:1;max-width:640px;display:none}
+    .search input{width:100%;border:1px solid var(--border);background:var(--card);padding:10px 12px 10px 36px;border-radius:12px;font-size:14px;outline:none}
+    .search svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);opacity:.6}
+    .btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);padding:9px 12px;border-radius:12px;font-size:14px;background:var(--card);cursor:pointer}
+    .btn:hover{background:color-mix(in oklab, var(--card) 90%, var(--border) 10%)}
+    .btn.primary{background:var(--success);border-color:var(--success);color:#fff}
+    .btn.primary:hover{filter:brightness(0.96)}
+    .btn.brand{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+    /* Mobile search */
+    .search-mobile{padding:8px 0 12px}
+    .search-mobile .input{position:relative}
+    .search-mobile input{width:100%;border:1px solid var(--border);background:var(--card);padding:10px 12px 10px 36px;border-radius:12px;font-size:14px;outline:none}
+    .search-mobile svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);opacity:.6}
+
+    @media (min-width: 768px){
+      .search{display:flex}
+      .search-mobile{display:none}
+    }
+
+    /* Hero */
+    .hero{padding:20px 0 8px}
+    .hero-grid{display:grid;gap:16px}
+    .box-muted{border:1px dashed var(--border);border-radius:16px;padding:14px;color:var(--muted)}
+    @media (min-width: 768px){
+      .hero-grid{grid-template-columns:2fr 1fr}
+      .hero{padding:32px 0 8px}
+      .brand-name{font-size:20px}
+    }
+
+    /* Results */
+    .toolbar{display:flex;align-items:center;justify-content:space-between;margin:8px 0 12px;color:var(--muted);font-size:14px}
+    .select{border:1px solid var(--border);background:var(--card);border-radius:12px;padding:8px 10px;font-size:14px}
+
+    .grid{display:grid;gap:16px}
+    @media (min-width: 640px){.grid{grid-template-columns:repeat(2,1fr)}}
+    @media (min-width: 1024px){.grid{grid-template-columns:repeat(3,1fr)}}
+
+    /* Card */
+    .card{border:1px solid var(--border);background:var(--card);border-radius:18px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.04);transition:box-shadow .2s, transform .2s}
+    .card:hover{box-shadow:0 8px 24px rgba(0,0,0,.08);transform:translateY(-2px)}
+    .figure{position:relative;aspect-ratio:16/9;overflow:hidden}
+    .figure img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+    .card:hover .figure img{transform:scale(1.05)}
+    .badge{position:absolute;left:12px;top:12px;background:color-mix(in oklab, var(--card) 95%, transparent);padding:4px 8px;border-radius:10px;border:1px solid var(--border);font-size:12px;color:var(--muted)}
+    .price{position:absolute;left:12px;bottom:12px;background:var(--brand);color:#fff;padding:6px 8px;border-radius:10px;font-weight:700}
+    .fav{position:absolute;right:12px;top:12px;background:color-mix(in oklab, var(--card) 95%, transparent);border:1px solid var(--border);width:36px;height:36px;border-radius:999px;display:grid;place-items:center;cursor:pointer}
+    .fav svg{opacity:.9}
+    .fav.active svg path{fill:#ef4444;stroke:#ef4444}
+
+    .card-body{padding:14px}
+    .title{font-weight:700;margin:2px 0 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .meta{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:14px}
+    .badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+    .pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);border-radius:999px;padding:4px 8px;font-size:12px;color:var(--muted)}
+    .actions{display:flex;align-items:center;justify-content:space-between;margin-top:10px}
+
+    /* Buttons */
+    .btn.solid{background:var(--accent);color:#fff;border-color:var(--accent)}
+    .btn.link{border-color:transparent;color:#4f46e5;padding-left:0;padding-right:0}
+    .btn.link strong{font-weight:800}
+
+    /* Drawer (Filters) */
+    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(3px);display:none;align-items:flex-end;justify-content:center;z-index:40}
+    .drawer{background:var(--card);border-top-left-radius:16px;border-top-right-radius:16px;width:100%;max-width:860px;border:1px solid var(--border)}
+    .drawer-header{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);padding:12px 16px}
+    .drawer-body{padding:16px;display:grid;gap:14px}
+    .row{display:grid;gap:10px}
+    .chips{display:flex;flex-wrap:wrap;gap:8px}
+    .chip{border:1px solid var(--border);background:var(--chip-bg);color:var(--chip-text);padding:8px 12px;border-radius:999px;font-size:14px;cursor:pointer}
+    .chip[data-active="true"]{background:var(--brand);color:#fff;border-color:var(--brand)}
+    .field{display:flex;align-items:center;gap:10px}
+    .input{border:1px solid var(--border);background:var(--card);border-radius:12px;padding:10px 12px;font-size:14px;width:100%}
+    .range{width:100%}
+    .drawer-actions{display:flex;align-items:center;justify-content:space-between;gap:10px}
+
+    @media (min-width: 768px){
+      .overlay{align-items:center}
+      .drawer{border-radius:16px;overflow:hidden}
+      .drawer-body{grid-template-columns:1fr 1fr}
+      .row.span-2{grid-column:1/-1}
+    }
+
+    /* Modal (Detail) */
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:50}
+    .modal-card{background:var(--card);border:1px solid var(--border);border-radius:18px;max-width:900px;width:100%;overflow:hidden}
+    .modal-grid{display:grid}
+    .modal-figure{height:220px;overflow:hidden}
+    .modal-figure img{width:100%;height:100%;object-fit:cover}
+    .modal-body{padding:16px}
+    .close{position:absolute;right:14px;top:14px;border:1px solid var(--border);background:var(--card);border-radius:999px;width:36px;height:36px;display:grid;place-items:center;cursor:pointer}
+    @media (min-width: 768px){
+      .modal-grid{grid-template-columns:1fr 1fr}
+      .modal-figure{height:auto}
+    }
+
+    footer{border-top:1px solid var(--border);margin-top:16px}
+    footer .row{display:flex;flex-direction:column;gap:8px;padding:18px 0;color:var(--muted);font-size:14px}
+    @media (min-width: 768px){footer .row{flex-direction:row;align-items:center;justify-content:space-between}}
+
+    /* Utilities */
+    .hide{display:none}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  </style>
+</head>
+<body>
+  <!-- SVG sprite icons -->
+  <svg class="sr-only" aria-hidden="true" focusable="false">
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2" fill="none"/><path d="m21 21-4.3-4.3" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></symbol>
+    <symbol id="i-filter" viewBox="0 0 24 24"><path d="M4 6h16M7 12h10M10 18h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 22s7-6.1 7-12a7 7 0 1 0-14 0c0 5.9 7 12 7 12Z" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="12" cy="10" r="2.5" fill="currentColor"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 21s-7.5-4.3-9.5-8.7C1.5 9 3.7 6 7 6c2 0 3.1 1.2 5 3 1.9-1.8 3-3 5-3 3.3 0 5.5 3 4.5 6.3C19.5 16.7 12 21 12 21Z" stroke="currentColor" stroke-width="1.8" fill="none"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5v9.5H3Z" stroke="currentColor" stroke-width="2" fill="none"/><path d="M9 21v-6h6v6" stroke="currentColor" stroke-width="2"/></symbol>
+    <symbol id="i-ruler" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2" ry="2" stroke="currentColor" stroke-width="2" fill="none"/><path d="M7 9h2M11 9h2M15 9h2M7 13h2M11 13h2M15 13h2" stroke="currentColor" stroke-width="2"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path d="M4 5c0-1.1.9-2 2-2h2l2 5-2 1c1.2 2.4 3.1 4.3 5.5 5.5l1-2 5 2v2c0 1.1-.9 2-2 2h-1C9.4 19 5 14.6 5 9V8c0-1.1-.9-2-1-3Z" fill="currentColor"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-wifi" viewBox="0 0 24 24"><path d="M2 8a18 18 0 0 1 20 0M5 12a12 12 0 0 1 14 0M8.5 15.5a6 6 0 0 1 7 0" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="12" cy="19" r="1.6" fill="currentColor"/></symbol>
+    <symbol id="i-snow" viewBox="0 0 24 24"><path d="M12 2v20M4.5 7 19.5 17M19.5 7 4.5 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-bath" viewBox="0 0 24 24"><rect x="3" y="10" width="18" height="6" rx="3" stroke="currentColor" stroke-width="2" fill="none"/><path d="M7 10V6a2 2 0 0 1 4 0v1" stroke="currentColor" stroke-width="2"/></symbol>
+    <symbol id="i-food" viewBox="0 0 24 24"><path d="M8 3v10M12 3v10M16 3v10M6 13h12v3a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3v-3Z" stroke="currentColor" stroke-width="2" fill="none"/></symbol>
+  </svg>
+
+  <header>
+    <div class="container header-row">
+      <div class="brand" aria-label="Tìm Trọ Nhanh">
+        <div class="brand-badge" aria-hidden="true"></div>
+        <div class="brand-name">TÌM TRỌ NHANH</div>
+      </div>
+      <div class="search" role="search">
+        <svg width="18" height="18"><use href="#i-search"></use></svg>
+        <input id="q" placeholder="Tìm: địa chỉ, tiện ích, từ khoá…" autocomplete="off" />
+      </div>
+      <button id="openFilter" class="btn" aria-haspopup="dialog"><svg width="18" height="18"><use href="#i-filter"></use></svg> Lọc</button>
+      <a class="btn primary" href="tel:0329335212"><svg width="18" height="18"><use href="#i-phone"></use></svg> Gọi: <strong>0329335212</strong></a>
+    </div>
+    <div class="container search-mobile">
+      <div class="input">
+        <svg width="18" height="18"><use href="#i-search"></use></svg>
+        <input id="q-m" placeholder="Tìm: địa chỉ, tiện ích, từ khoá…" autocomplete="off" />
+      </div>
+    </div>
+  </header>
+
+  <section class="container hero" aria-labelledby="hero-title">
+    <div class="hero-grid">
+      <div>
+        <h1 id="hero-title" style="margin:0 0 6px;font-size:clamp(22px,3.5vw,34px);font-weight:900;letter-spacing:.2px">Thuê phòng trọ, căn hộ mini, nhà nguyên căn — nhanh & dễ</h1>
+        <p style="margin:6px 0;color:var(--muted)">Lọc theo giá, diện tích, tiện ích; xem hình chi tiết và gọi chủ trọ chỉ với một chạm.</p>
+      </div>
+      <div class="box-muted">
+        <div style="font-weight:700">Bản đồ (sắp ra mắt)</div>
+        <div style="margin-top:4px">Hiển thị vị trí phòng theo khu vực bạn chọn.</div>
+      </div>
+    </div>
+  </section>
+
+  <main class="container" style="padding:16px 0 24px">
+    <div class="toolbar">
+      <div>Đang hiển thị <span id="count" style="font-weight:700">0</span> tin phù hợp</div>
+      <div class="hide" id="sortWrap">
+        <label for="sort" class="sr-only">Sắp xếp</label>
+        <select id="sort" class="select">
+          <option>mới nhất</option>
+          <option>giá tăng dần</option>
+          <option>giá giảm dần</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="grid" class="grid" aria-live="polite"></div>
+
+    <div id="empty" class="hide" style="margin-top:16px;border:1px solid var(--border);border-radius:16px;padding:20px;text-align:center;color:var(--muted)">Không có kết quả phù hợp. Thử đổi bộ lọc khác nhé.</div>
+
+    <div style="display:flex;justify-content:center;margin-top:16px">
+      <button id="loadMore" class="btn solid">Tải thêm</button>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div>© <span id="year"></span> Tìm Trọ Nhanh. All rights reserved.</div>
+        <div>Hỗ trợ: <a class="btn link" href="tel:0329335212">Gọi <strong>0329335212</strong></a></div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Filter Drawer -->
+  <div id="overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="filter-title">
+    <div class="drawer">
+      <div class="drawer-header">
+        <div id="filter-title" style="font-weight:800">Bộ lọc</div>
+        <button id="closeFilter" class="btn" aria-label="Đóng"><svg width="18" height="18"><use href="#i-x"></use></svg></button>
+      </div>
+      <div class="drawer-body">
+        <div class="row">
+          <label for="q2" style="font-weight:600;font-size:14px">Từ khoá / địa chỉ</label>
+          <input id="q2" class="input" placeholder="Ví dụ: Q.10, ban công, gần BK" />
+
+          <div style="font-weight:600;font-size:14px">Loại hình</div>
+          <div class="chips" id="typeChips"></div>
+        </div>
+
+        <div class="row">
+          <div style="font-weight:600;font-size:14px">Khoảng giá (triệu/tháng)</div>
+          <div class="field">
+            <input id="pMin" type="number" class="input" min="0" max="50" value="0" style="width:120px"/> 
+            <span>–</span>
+            <input id="pMax" type="number" class="input" min="0" max="50" value="20" style="width:120px"/>
+          </div>
+          <div style="font-weight:600;font-size:14px">Diện tích tối thiểu</div>
+          <div class="field">
+            <input id="areaMin" type="range" class="range" min="0" max="80" value="0" />
+            <span id="areaMinVal" style="width:72px;text-align:right">0 m²</span>
+          </div>
+        </div>
+
+        <div class="row span-2">
+          <div style="font-weight:600;font-size:14px">Tiện ích</div>
+          <div class="chips" id="amenityChips"></div>
+        </div>
+
+        <div class="row span-2 drawer-actions">
+          <div class="field">
+            <label for="sort2" style="font-size:14px">Sắp xếp:</label>
+            <select id="sort2" class="select">
+              <option>mới nhất</option>
+              <option>giá tăng dần</option>
+              <option>giá giảm dần</option>
+            </select>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button id="reset" class="btn">Xoá lọc</button>
+            <button id="apply" class="btn brand" style="color:#fff">Áp dụng</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detail Modal -->
+  <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-card">
+      <div class="modal-grid">
+        <div class="modal-figure"><img id="mImg" alt="Ảnh phòng" loading="lazy" /></div>
+        <div class="modal-body">
+          <div style="position:relative">
+            <button id="closeModal" class="close" aria-label="Đóng"><svg width="18" height="18"><use href="#i-x"></use></svg></button>
+          </div>
+          <h3 id="modal-title" style="margin:0 0 6px;font-size:20px;font-weight:800"></h3>
+          <div class="badges" style="margin:8px 0">
+            <span class="pill"><svg width="16" height="16"><use href="#i-pin"></use></svg><span id="mAddr"></span></span>
+            <span class="pill"><svg width="16" height="16"><use href="#i-ruler"></use></svg><span id="mArea"></span></span>
+            <span class="pill"><svg width="16" height="16"><use href="#i-home"></use></svg><span id="mType"></span></span>
+          </div>
+          <div style="font-size:22px;font-weight:900;color:var(--brand)" id="mPrice"></div>
+          <p id="mDesc" style="color:var(--text);line-height:1.6;font-size:14px;margin:10px 0 4px"></p>
+          <div>
+            <div style="font-weight:700;margin:8px 0 6px">Tiện ích</div>
+            <div class="badges" id="mAmen"></div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:14px">
+            <a class="btn primary" href="tel:0329335212"><svg width="18" height="18"><use href="#i-phone"></use></svg> Gọi ngay <strong>0329335212</strong></a>
+            <button class="btn" id="closeModal2">Đóng</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const PHONE = '0329335212';
+    const TYPE_OPTIONS = ["phòng trọ", "căn hộ mini", "ở ghép", "nhà nguyên căn"];
+    const AMENITY_OPTIONS = [
+      { key: "wc riêng", label: "WC riêng", icon: "#i-bath" },
+      { key: "máy lạnh", label: "Máy lạnh", icon: "#i-snow" },
+      { key: "wifi", label: "Wi‑Fi", icon: "#i-wifi" },
+      { key: "nấu ăn", label: "Nấu ăn", icon: "#i-food" },
+    ];
+
+    const LISTINGS = [
+      { id:1, title:"Phòng trọ mới, có ban công, full nội thất", price:3.8, area:25, address:"Q.10, TP.HCM", type:"phòng trọ", amenities:["wc riêng","máy lạnh","wifi","nấu ăn"], images:["https://images.unsplash.com/photo-1505691938895-1758d7feb511?q=80&w=1400&auto=format&fit=crop"], createdAt:"2025-08-08", description:"Phòng mới sơn sửa, sáng thoáng, cửa sổ lớn. Giờ giấc tự do, an ninh 24/7. Gần trường ĐH Bách Khoa, chợ và bến xe bus." },
+      { id:2, title:"Căn hộ mini 1PN – thang máy, giữ xe", price:6.5, area:35, address:"Q.3, TP.HCM", type:"căn hộ mini", amenities:["wc riêng","máy lạnh","wifi","nấu ăn"], images:["https://images.unsplash.com/photo-1493809842364-78817add7ffb?q=80&w=1400&auto=format&fit=crop"], createdAt:"2025-08-06", description:"Căn hộ mini có cửa sổ lớn, bếp riêng. Toà nhà an ninh, thang máy, hầm xe rộng. Thích hợp cặp đôi hoặc người đi làm." },
+      { id:3, title:"Ở ghép nữ – phòng sạch, có máy lạnh", price:1.6, area:18, address:"Q. Bình Thạnh, TP.HCM", type:"ở ghép", amenities:["máy lạnh","wifi"], images:["https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?q=80&w=1400&auto=format&fit=crop"], createdAt:"2025-08-03", description:"Tìm 1 bạn nữ ở ghép, phòng sạch sẽ, có máy lạnh, gần Pearl Plaza. Ưu tiên người gọn gàng, đi làm giờ hành chính." },
+      { id:4, title:"Nhà nguyên căn 1 trệt 1 lầu – gần ĐH KHTN", price:12.0, area:65, address:"Q.5, TP.HCM", type:"nhà nguyên căn", amenities:["wc riêng","nấu ăn","wifi"], images:["https://images.unsplash.com/photo-1501183638710-841dd1904471?q=80&w=1400&auto=format&fit=crop"], createdAt:"2025-08-02", description:"Nhà hẻm thông, khu an ninh, gần nhiều trường đại học. Phù hợp gia đình trẻ hoặc nhóm bạn." },
+      { id:5, title:"Phòng trọ giá rẻ – gần bến xe Miền Đông", price:2.2, area:20, address:"TP. Thủ Đức, TP.HCM", type:"phòng trọ", amenities:["wifi"], images:["https://images.unsplash.com/photo-1560185127-6ed189bf02f4?q=80&w=1400&auto=format&fit=crop"], createdAt:"2025-08-05", description:"Phòng sạch sẽ, có cửa sổ, giờ giấc tự do. Đi bộ 5 phút ra bến xe Miền Đông mới." },
+      { id:6, title:"Căn hộ studio mới 100% – view thoáng", price:7.2, area:30, address:"Q. Phú Nhuận, TP.HCM", type:"căn hộ mini", amenities:["wc riêng","máy lạnh","wifi"], images:["https://images.unsplash.com/photo-1549187774-b4e9b0445b41?q=80&w=1400&auto=format&fit=crop"], createdAt:"2025-08-09", description:"Studio mới bàn giao, nội thất cơ bản, thang máy, chỗ để xe rộng rãi. Hẻm lớn, yên tĩnh." },
+      { id:7, title:"Phòng trọ có gác – bếp riêng", price:3.2, area:22, address:"Q. Tân Bình, TP.HCM", type:"phòng trọ", amenities:["wc riêng","nấu ăn","wifi"], images:["https://images.unsplash.com/photo-1484154218962-a197022b5858?q=80&w=1400&auto=format&fit=crop"], createdAt:"2025-08-04", description:"Phòng có gác lửng, bếp riêng, giờ giấc tự do. Gần sân bay Tân Sơn Nhất." },
+      { id:8, title:"Ở ghép nam – phòng 25m², ngay trung tâm", price:1.8, area:25, address:"Q.1, TP.HCM", type:"ở ghép", amenities:["wifi"], images:["https://images.unsplash.com/photo-1484154218962-a197022b5858?q=80&w=1400&auto=format&fit=crop"], createdAt:"2025-08-07", description:"Tìm 1 bạn nam ở ghép, phòng rộng rãi, ngay trung tâm, đi bộ ra công viên 23/9." },
+    ];
+
+    const state = {
+      q: '', type: '', amenities: [], priceMin: 0, priceMax: 20, areaMin: 0, sort: 'mới nhất', page: 1,
+    };
+
+    // Elements
+    const els = {
+      grid: document.getElementById('grid'),
+      count: document.getElementById('count'),
+      empty: document.getElementById('empty'),
+      loadMore: document.getElementById('loadMore'),
+      sortWrap: document.getElementById('sortWrap'),
+      sort: document.getElementById('sort'),
+      q: document.getElementById('q'),
+      qM: document.getElementById('q-m'),
+      overlay: document.getElementById('overlay'),
+      openFilter: document.getElementById('openFilter'),
+      closeFilter: document.getElementById('closeFilter'),
+      q2: document.getElementById('q2'),
+      typeChips: document.getElementById('typeChips'),
+      amenityChips: document.getElementById('amenityChips'),
+      pMin: document.getElementById('pMin'),
+      pMax: document.getElementById('pMax'),
+      areaMin: document.getElementById('areaMin'),
+      areaMinVal: document.getElementById('areaMinVal'),
+      sort2: document.getElementById('sort2'),
+      reset: document.getElementById('reset'),
+      apply: document.getElementById('apply'),
+      modal: document.getElementById('modal'),
+      closeModal: document.getElementById('closeModal'),
+      closeModal2: document.getElementById('closeModal2'),
+      mImg: document.getElementById('mImg'),
+      mTitle: document.getElementById('modal-title'),
+      mAddr: document.getElementById('mAddr'),
+      mArea: document.getElementById('mArea'),
+      mType: document.getElementById('mType'),
+      mPrice: document.getElementById('mPrice'),
+      mDesc: document.getElementById('mDesc'),
+      mAmen: document.getElementById('mAmen'),
+    };
+
+    // Helpers
+    const fmtPrice = (n) => `${n.toFixed(1)} triệu/tháng`;
+    const fmtArea = (m2) => `${m2} m²`;
+
+    function applyFilters(data){
+      let arr = data.slice();
+      const k = state.q.trim().toLowerCase();
+      if(k){
+        arr = arr.filter(x => x.title.toLowerCase().includes(k) || x.address.toLowerCase().includes(k) || x.description.toLowerCase().includes(k));
+      }
+      if(state.type) arr = arr.filter(x => x.type === state.type);
+      if(state.amenities.length){
+        arr = arr.filter(x => state.amenities.every(a => x.amenities.includes(a)));
+      }
+      arr = arr.filter(x => x.price >= state.priceMin && x.price <= state.priceMax);
+      arr = arr.filter(x => x.area >= state.areaMin);
+      if(state.sort === 'mới nhất') arr.sort((a,b)=> new Date(b.createdAt) - new Date(a.createdAt));
+      else if(state.sort === 'giá tăng dần') arr.sort((a,b)=> a.price - b.price);
+      else if(state.sort === 'giá giảm dần') arr.sort((a,b)=> b.price - a.price);
+      return arr;
+    }
+
+    function cardTemplate(item){
+      const amen = item.amenities.slice(0,2).map(a=>`<span class="pill">${a}</span>`).join('');
+      return `
+        <article class="card" data-id="${item.id}">
+          <div class="figure">
+            <img src="${item.images[0]}" alt="${item.title}" loading="lazy"/>
+            <div class="badge">${fmtArea(item.area)}</div>
+            <div class="price">${fmtPrice(item.price)}</div>
+            <button class="fav" aria-label="Yêu thích"><svg width="18" height="18"><use href="#i-heart"></use></svg></button>
+          </div>
+          <div class="card-body">
+            <h3 class="title" title="${item.title}">${item.title}</h3>
+            <div class="meta"><svg width="16" height="16"><use href="#i-pin"></use></svg>${item.address}</div>
+            <div class="badges"><span class="pill"><svg width="16" height="16"><use href="#i-home"></use></svg>${item.type}</span>${amen}</div>
+            <div class="actions">
+              <button class="btn solid" data-action="detail">Xem chi tiết</button>
+              <a class="btn link" href="tel:${PHONE}"><svg width="16" height="16"><use href="#i-phone"></use></svg> <strong>${PHONE}</strong></a>
+            </div>
+          </div>
+        </article>`;
+    }
+
+    function render(){
+      const filtered = applyFilters(LISTINGS);
+      els.count.textContent = filtered.length;
+      const pageSize = state.page * 6;
+      const subset = filtered.slice(0, pageSize);
+      els.grid.innerHTML = subset.map(cardTemplate).join('');
+      els.empty.classList.toggle('hide', subset.length !== 0);
+      els.loadMore.style.display = subset.length < filtered.length ? 'inline-flex' : 'none';
+      document.getElementById('sortWrap').classList.toggle('hide', filtered.length <= 1);
+      wireCards();
+    }
+
+    function wireCards(){
+      els.grid.querySelectorAll('.fav').forEach(btn=>{
+        btn.addEventListener('click',()=>btn.classList.toggle('active'))
+      });
+      els.grid.querySelectorAll('[data-action="detail"]').forEach(btn=>{
+        btn.addEventListener('click', (e)=>{
+          const card = e.target.closest('.card');
+          const id = Number(card.dataset.id);
+          const item = LISTINGS.find(x=>x.id===id);
+          openDetail(item);
+        })
+      });
+    }
+
+    function openDetail(item){
+      els.mImg.src = item.images[0];
+      els.mImg.alt = item.title;
+      els.mTitle.textContent = item.title;
+      els.mAddr.textContent = item.address;
+      els.mArea.textContent = fmtArea(item.area);
+      els.mType.textContent = item.type;
+      els.mPrice.textContent = fmtPrice(item.price);
+      els.mDesc.textContent = item.description;
+      els.mAmen.innerHTML = AMENITY_OPTIONS.map(a => {
+        const active = item.amenities.includes(a.key);
+        const cls = active ? 'pill' : 'pill';
+        const opacity = active ? 1 : .5;
+        return `<span class="${cls}" style="opacity:${opacity}"><svg width="16" height="16"><use href="${a.icon}"></use></svg>${a.label}</span>`;
+      }).join('');
+      els.modal.style.display = 'flex';
+      document.body.style.overflow='hidden';
+      lastFocus = document.activeElement;
+      els.closeModal.focus();
+    }
+
+    function closeDetail(){
+      els.modal.style.display = 'none';
+      document.body.style.overflow='';
+      if(lastFocus) lastFocus.focus();
+    }
+
+    // Filter UI
+    function buildChips(){
+      els.typeChips.innerHTML = TYPE_OPTIONS.map(t=>`<button class="chip" data-value="${t}" data-group="type">${t}</button>`).join('');
+      els.amenityChips.innerHTML = AMENITY_OPTIONS.map(a=>`<button class="chip" data-value="${a.key}" data-group="amen">${a.label}</button>`).join('');
+      updateChips();
+      els.typeChips.addEventListener('click', (e)=>{
+        const b = e.target.closest('.chip'); if(!b) return;
+        const val = b.dataset.value;
+        state.type = state.type === val ? '' : val; updateChips();
+      });
+      els.amenityChips.addEventListener('click', (e)=>{
+        const b = e.target.closest('.chip'); if(!b) return;
+        const val = b.dataset.value;
+        const i = state.amenities.indexOf(val);
+        if(i>=0) state.amenities.splice(i,1); else state.amenities.push(val);
+        updateChips();
+      });
+    }
+    function updateChips(){
+      [...els.typeChips.children].forEach(b=>b.dataset.active = (b.dataset.value === state.type));
+      [...els.amenityChips.children].forEach(b=>b.dataset.active = state.amenities.includes(b.dataset.value));
+    }
+
+    function openDrawer(){
+      els.overlay.style.display = 'flex';
+      document.body.style.overflow='hidden';
+      els.q2.value = state.q; els.pMin.value = state.priceMin; els.pMax.value = state.priceMax; els.areaMin.value = state.areaMin; els.areaMinVal.textContent = `${state.areaMin} m²`; els.sort2.value = state.sort; updateChips();
+    }
+    function closeDrawer(){
+      els.overlay.style.display = 'none';
+      document.body.style.overflow='';
+    }
+
+    // Wire events
+    let lastFocus = null;
+    document.getElementById('year').textContent = new Date().getFullYear();
+    buildChips();
+    render();
+
+    els.q.addEventListener('input', e=>{ state.q = e.target.value; state.page = 1; render(); });
+    els.qM.addEventListener('input', e=>{ state.q = e.target.value; state.page = 1; render(); });
+    els.sort.addEventListener('change', e=>{ state.sort = e.target.value; render(); });
+    els.loadMore.addEventListener('click', ()=>{ state.page++; render(); });
+
+    els.openFilter.addEventListener('click', ()=>{ lastFocus = document.activeElement; openDrawer(); });
+    els.closeFilter.addEventListener('click', closeDrawer);
+    els.overlay.addEventListener('click', (e)=>{ if(e.target === els.overlay) closeDrawer(); });
+
+    els.areaMin.addEventListener('input', ()=>{ els.areaMinVal.textContent = `${els.areaMin.value} m²`; });
+
+    els.reset.addEventListener('click', ()=>{
+      Object.assign(state, { q:'', type:'', amenities:[], priceMin:0, priceMax:20, areaMin:0, sort:'mới nhất', page:1 });
+      els.q.value = ''; els.qM.value='';
+      closeDrawer(); render();
+    });
+
+    els.apply.addEventListener('click', ()=>{
+      state.q = els.q2.value; state.priceMin = Math.min(+els.pMin.value || 0, +els.pMax.value || 0); state.priceMax = Math.max(+els.pMin.value || 0, +els.pMax.value || 0); if(state.priceMin>state.priceMax){ const t=state.priceMin; state.priceMin=state.priceMax; state.priceMax=t; }
+      state.areaMin = +els.areaMin.value || 0; state.sort = els.sort2.value; state.page=1; closeDrawer(); render();
+    });
+
+    // Modal events
+    els.closeModal.addEventListener('click', closeDetail);
+    els.closeModal2.addEventListener('click', closeDetail);
+    els.modal.addEventListener('click', (e)=>{ if(e.target === els.modal) closeDetail(); });
+    window.addEventListener('keydown', (e)=>{ if(e.key==='Escape'){ if(els.modal.style.display==='flex') closeDetail(); if(els.overlay.style.display==='flex') closeDrawer(); }});
+  </script>
+</body>
+</html>
