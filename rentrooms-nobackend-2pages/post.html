@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <title>Tìm Trọ Nhanh — Đăng cho thuê</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <header class="container">
+    <h1>Đăng cho thuê</h1>
+    <nav>
+      <a href="./search.html">Tìm kiếm</a>
+    </nav>
+  </header>
+
+  <section class="container">
+    <div class="badge">Dữ liệu lưu cục bộ (localStorage)</div>
+    <div id="alertBox" class="alert" style="display:none"></div>
+    <form id="formRoom" class="form">
+      <input name="id" type="hidden">
+      <input name="title" placeholder="Tiêu đề" required>
+      <input name="price" type="number" step="0.1" placeholder="Giá (triệu)" required>
+      <input name="district" placeholder="Khu vực (vd: Q10)" required>
+      <input name="address" placeholder="Địa chỉ" required>
+      <input name="phone" placeholder="Số điện thoại" value="0329335212">
+      <textarea name="description" placeholder="Mô tả (nội thất, diện tích, giờ giấc...)"></textarea>
+      <div class="row">
+        <button type="submit">Lưu</button>
+        <button type="button" id="btnResetForm" class="ghost">Nhập mới</button>
+      </div>
+    </form>
+    <hr>
+    <div class="row">
+      <button id="btnExport">Tải JSON</button>
+      <label class="import"><input id="fileImport" type="file" accept="application/json"> Nhập JSON</label>
+      <button id="btnClear" class="danger">Xoá toàn bộ dữ liệu</button>
+    </div>
+  </section>
+
+  <section class="container">
+    <h2>Danh sách của bạn</h2>
+    <div class="grid" id="list"></div>
+  </section>
+
+  <template id="card-tpl">
+    <article class="card">
+      <div class="card-head">
+        <h3 class="title"></h3>
+        <div class="actions">
+          <button class="edit">Sửa</button>
+          <button class="danger delete">Xoá</button>
+        </div>
+      </div>
+      <p class="meta"></p>
+      <p class="desc"></p>
+    </article>
+  </template>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="./js/store.js"></script>
+  <script src="./js/post.js"></script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+:root{
+  --bg:#0b1020; --card:#11182a; --text:#e6eefc; --muted:#93a0b8; --border:#23314f;
+  --brand:#5b8cff; --success:#47d18c; --danger:#ef4444;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,Segoe UI,Roboto}
+a{color:var(--brand);text-decoration:none}
+.container{max-width:960px;margin:auto;padding:16px}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px}
+header h1{margin:0}
+nav a{margin-left:12px}
+.muted{color:var(--muted)}
+input,select,textarea,button{
+  background:var(--card); color:var(--text); border:1px solid var(--border); border-radius:8px;
+  padding:10px 12px; outline:none;
+}
+button{cursor:pointer}
+button.ghost{background:transparent;border-color:var(--border)}
+button.danger{background:transparent;border-color:var(--danger);color:var(--danger)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px}
+.card-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.card .title{margin:0}
+.card .meta{color:var(--muted);margin:6px 0 8px}
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.form textarea{grid-column:1/-1;min-height:90px}
+.form .row{grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap}
+.badge{display:inline-block;padding:4px 8px;border:1px dashed var(--border);border-radius:999px;font-size:12px;color:var(--muted)}
+.alert{padding:10px 12px;border:1px solid var(--border);border-radius:8px;margin:12px 0}
+.alert.success{border-color:var(--success);color:var(--success)}
+.alert.error{border-color:var(--danger);color:var(--danger)}
+hr{border:0;border-top:1px solid var(--border);margin:16px 0}

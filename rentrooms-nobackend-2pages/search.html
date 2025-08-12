@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <title>Tìm Trọ Nhanh — Tìm kiếm</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <header class="container">
+    <h1>Tìm trọ</h1>
+    <nav>
+      <a href="./post.html">Đăng cho thuê</a>
+    </nav>
+  </header>
+
+  <section class="container">
+    <div id="alertBox" class="alert" style="display:none"></div>
+    <div class="badge">Dữ liệu lưu cục bộ (localStorage)</div>
+    <div class="form" style="margin-top:12px">
+      <div>
+        <label>Giá tối đa (triệu)<br>
+          <input id="maxPrice" type="range" min="0" max="20" step="0.5" value="6">
+        </label>
+        <div class="muted">Đang chọn: <span id="priceVal">6</span></div>
+      </div>
+      <div>
+        <label>Khu vực<br>
+          <select id="district">
+            <option value="">Tất cả</option>
+            <option>Q1</option><option>Q3</option><option>Q5</option>
+            <option>Q10</option><option>Q11</option><option>Q12</option>
+            <option>TP.Thủ Đức</option>
+          </select>
+        </label>
+      </div>
+      <div>
+        <label>Từ khoá<br>
+          <input id="keyword" type="text" placeholder="vd: ban công, gần ĐH BK, máy lạnh...">
+        </label>
+      </div>
+      <div>
+        <label>Sắp xếp<br>
+          <select id="sort">
+            <option value="">Mặc định</option>
+            <option value="latest">Mới nhất</option>
+            <option value="price_asc">Giá tăng dần</option>
+            <option value="price_desc">Giá giảm dần</option>
+          </select>
+        </label>
+      </div>
+      <div class="row">
+        <button id="btnSearch">Lọc</button>
+        <button id="btnReset" class="ghost">Xoá lọc</button>
+        <a id="btnPostNew" class="ghost" href="./post.html">Đăng mới</a>
+        <span id="count" class="muted"></span>
+      </div>
+    </div>
+  </section>
+
+  <main class="container grid" id="list"></main>
+
+  <template id="card-tpl">
+    <article class="card">
+      <div class="card-head">
+        <h3 class="title"></h3>
+        <div class="actions">
+          <button class="edit">Sửa</button>
+          <a class="ghost" id="callLink" target="_blank" rel="noopener">Gọi</a>
+        </div>
+      </div>
+      <p class="meta"></p>
+      <p class="desc"></p>
+    </article>
+  </template>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="./js/store.js"></script>
+  <script src="./js/search.js"></script>
+</body>
+</html>
