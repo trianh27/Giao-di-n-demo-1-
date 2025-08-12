@@ -1,0 +1,98 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Đăng tin cho thuê</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script defer src="js/app.js"></script>
+  <script defer src="js/post.js"></script>
+</head>
+<body>
+  <header class="sitebar">
+    <div class="container">
+      <div class="row">
+        <strong>Tìm Trọ Nhanh</strong>
+        <span class="badge">Đăng tin</span>
+      </div>
+      <nav>
+        <a href="index.html">Trang chủ</a>
+        <a href="search.html">Tìm phòng</a>
+        <a href="post.html">Đăng tin</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <h2>Đăng tin cho thuê</h2>
+    <form id="postForm">
+      <div class="field">
+        <label>Tiêu đề *</label>
+        <input class="input" type="text" id="title" placeholder="Phòng trọ 20m² gần ĐH, full nội thất" required>
+      </div>
+
+      <div class="row">
+        <div class="field" style="flex:1">
+          <label>Giá (VND) *</label>
+          <input class="input" type="number" id="price" min="0" step="1000" placeholder="VD: 2500000" required>
+        </div>
+        <div class="field" style="flex:1">
+          <label>Diện tích (m²) *</label>
+          <input class="input" type="number" id="area" min="1" step="1" placeholder="VD: 20" required>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="field" style="flex:1">
+          <label>Thành phố *</label>
+          <input class="input" type="text" id="city" placeholder="VD: TP.HCM" required>
+        </div>
+        <div class="field" style="flex:1">
+          <label>Quận/Huyện</label>
+          <input class="input" type="text" id="district" placeholder="VD: Quận 10">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Số điện thoại liên hệ *</label>
+        <input class="input" type="tel" id="phone" placeholder="0329335212" value="0329335212" required>
+        <span class="small">SĐT sẽ hiển thị đậm trên thẻ tin.</span>
+      </div>
+
+      <fieldset>
+        <legend>Tiện ích</legend>
+        <div class="row">
+          <label><input type="checkbox" id="amenity-wifi"> Wifi</label>
+          <label><input type="checkbox" id="amenity-park"> Chỗ để xe</label>
+          <label><input type="checkbox" id="amenity-ac"> Máy lạnh</label>
+          <label><input type="checkbox" id="amenity-private"> WC riêng</label>
+        </div>
+      </fieldset>
+
+      <div class="field">
+        <label>Ảnh đại diện (chọn 1)</label>
+        <div class="row">
+          <input class="input" type="url" id="imageUrl" placeholder="Dán đường dẫn ảnh (https://...)">
+          <span class="small">hoặc</span>
+          <input class="input" type="file" id="imageFile" accept="image/*">
+        </div>
+        <div class="small">Có xem trước ngay bên dưới.</div>
+        <img id="preview" alt="Xem trước" style="margin-top:8px;max-width:320px;display:none;border:1px solid var(--border);border-radius:8px">
+      </div>
+
+      <div class="field">
+        <label>Mô tả chi tiết</label>
+        <textarea id="desc" placeholder="Mô tả ngắn gọn về phòng, nội thất, giờ giấc, tiền điện nước..."></textarea>
+      </div>
+
+      <div class="row">
+        <button class="btn ok" type="submit">Lưu tin</button>
+        <button class="btn secondary" type="reset">Làm lại</button>
+      </div>
+
+      <div id="msg" class="note" style="margin-top:12px;display:none"></div>
+    </form>
+  </main>
+</body>
+</html>

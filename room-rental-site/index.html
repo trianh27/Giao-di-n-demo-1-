@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tìm Trọ Nhanh — Trang chủ</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script defer src="js/app.js"></script>
+  <script defer>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Update counters and show seed button if empty
+      const count = App.getRooms().length;
+      document.getElementById('count').textContent = count;
+      const seedBtn = document.getElementById('seed');
+      if (count === 0) seedBtn.style.display = 'inline-flex';
+      seedBtn.addEventListener('click', () => {
+        App.seedDemoData();
+        location.reload();
+      });
+    });
+  </script>
+</head>
+<body>
+  <header class="sitebar">
+    <div class="container">
+      <div class="row">
+        <strong>Tìm Trọ Nhanh</strong>
+        <span class="badge">No backend • LocalStorage</span>
+      </div>
+      <nav>
+        <a href="index.html">Trang chủ</a>
+        <a href="search.html">Tìm phòng</a>
+        <a href="post.html">Đăng tin</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Website thuê & đăng thuê phòng trọ đơn giản</h1>
+      <p>Mã nguồn thuần <strong>HTML + CSS + JS</strong>, không framework, dữ liệu lưu ở <strong>LocalStorage</strong>.</p>
+    </section>
+
+    <div class="note">
+      <div class="row">
+        <button id="seed" class="btn secondary" style="display:none">Tạo dữ liệu mẫu</button>
+        <span class="small">Hiện có <span id="count" class="bold">0</span> tin đăng trên trình duyệt của bạn.</span>
+      </div>
+    </div>
+
+    <div style="height:16px"></div>
+
+    <div class="grid">
+      <div class="card">
+        <img src="assets/cover-search.webp" alt="Tìm phòng" onerror="this.style.display='none'">
+        <div class="body">
+          <h3>Tìm phòng</h3>
+          <p class="muted">Lọc theo giá, diện tích, tiện ích, từ khóa…</p>
+          <a class="btn" href="search.html">Mở trang tìm phòng</a>
+        </div>
+      </div>
+      <div class="card">
+        <img src="assets/cover-post.webp" alt="Đăng tin" onerror="this.style.display='none'">
+        <div class="body">
+          <h3>Đăng tin cho thuê</h3>
+          <p class="muted">Biểu mẫu tối giản, có xem trước ảnh và kiểm tra dữ liệu.</p>
+          <a class="btn" href="post.html">Mở trang đăng tin</a>
+        </div>
+      </div>
+      <div class="card">
+        <img src="assets/cover-guide.webp" alt="Hướng dẫn" onerror="this.style.display='none'">
+        <div class="body">
+          <h3>Hướng dẫn chỉnh sửa</h3>
+          <ul class="small">
+            <li>Chỉnh <code>styles.css</code> để đổi màu, font.</li>
+            <li>Xem <code>js/app.js</code> để biết cấu trúc dữ liệu.</li>
+            <li>Dùng nút “Tạo dữ liệu mẫu” để test nhanh.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <p class="footer small">© 2025 — Bản demo học tập. Mọi dữ liệu chỉ lưu trên máy của bạn.</p>
+  </main>
+</body>
+</html>

@@ -1,0 +1,79 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tìm phòng trọ</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script defer src="js/app.js"></script>
+  <script defer src="js/search.js"></script>
+</head>
+<body>
+  <header class="sitebar">
+    <div class="container">
+      <div class="row">
+        <strong>Tìm Trọ Nhanh</strong>
+        <span class="badge">Tìm phòng</span>
+      </div>
+      <nav>
+        <a href="index.html">Trang chủ</a>
+        <a href="search.html">Tìm phòng</a>
+        <a href="post.html">Đăng tin</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="toolbar">
+      <div>
+        <label for="q">Từ khóa</label>
+        <input id="q" class="input" type="text" placeholder="VD: gần ĐH Bách Khoa, có máy lạnh..." />
+      </div>
+      <div>
+        <label>Giá (VND)</label>
+        <div class="row">
+          <input id="minPrice" class="input" type="number" placeholder="Từ" min="0">
+          <input id="maxPrice" class="input" type="number" placeholder="Đến" min="0">
+        </div>
+      </div>
+      <div>
+        <label>Diện tích (m²)</label>
+        <input id="minArea" class="input" type="number" placeholder="Tối thiểu" min="0">
+      </div>
+      <div>
+        <label for="city">Thành phố</label>
+        <input id="city" class="input" type="text" placeholder="VD: TP.HCM, Hà Nội">
+      </div>
+      <div>
+        <label for="sort">Sắp xếp</label>
+        <select id="sort">
+          <option value="new">Mới nhất</option>
+          <option value="price-asc">Giá tăng dần</option>
+          <option value="price-desc">Giá giảm dần</option>
+          <option value="area-desc">Diện tích lớn → nhỏ</option>
+        </select>
+      </div>
+      <fieldset>
+        <legend>Tiện ích</legend>
+        <div class="row">
+          <label><input type="checkbox" id="amenity-wifi"> Wifi</label>
+          <label><input type="checkbox" id="amenity-park"> Chỗ để xe</label>
+          <label><input type="checkbox" id="amenity-ac"> Máy lạnh</label>
+          <label><input type="checkbox" id="amenity-private"> WC riêng</label>
+        </div>
+      </fieldset>
+      <div class="row">
+        <button id="apply" class="btn">Áp dụng lọc</button>
+        <button id="clear" class="btn secondary" title="Xóa tất cả lọc">Xóa lọc</button>
+        <button id="seed" class="btn secondary" title="Tạo dữ liệu mẫu (nếu trống)">Tạo mẫu</button>
+      </div>
+    </div>
+
+    <div style="height:12px"></div>
+
+    <div id="results" class="grid"></div>
+    <div id="empty" class="empty" style="display:none">Chưa có phòng nào phù hợp. Hãy nới điều kiện lọc hoặc nhấn “Tạo mẫu”.</div>
+  </main>
+</body>
+</html>
