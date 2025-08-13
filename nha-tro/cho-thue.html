@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <title>Đăng tin cho thuê | Nhà Trọ 360</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script defer src="assets/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const formDangTin = document.getElementById('form-dangtin');
+      const hopThongBao = document.getElementById('hop-thong-bao');
+
+      formDangTin.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const duLieu = new FormData(formDangTin);
+
+        // Lấy dữ liệu từ form (đặt tên biến rất "người Việt")
+        const nguoiDang = {
+          hoTen: duLieu.get('ho-ten').trim(),
+          soDienThoai: duLieu.get('so-dien-thoai').trim(),
+          email: duLieu.get('email').trim(),
+        };
+
+        const phongMoi = {
+          idPhong: taoId(),
+          tieuDe: duLieu.get('tieu-de').trim(),
+          moTa: duLieu.get('mo-ta').trim(),
+          diaChi: duLieu.get('dia-chi').trim(),
+          khuVuc: duLieu.get('khu-vuc').trim(),
+          giaThue: Number(duLieu.get('gia-thue')),
+          dienTich: Number(duLieu.get('dien-tich')),
+          hinhAnh: duLieu.get('hinh-anh').trim(),
+          tienNghi: duLieu.getAll('tien-nghi'), // mảng
+          nguoiDang,
+          ngayDang: Date.now(),
+        };
+
+        // Kiểm tra nhanh (kết hợp HTML5 required + JS)
+        if (!phongMoi.tieuDe || !phongMoi.diaChi || !phongMoi.khuVuc) {
+          return thongBaoLoi('Thiếu tiêu đề/địa chỉ/khu vực.');
+        }
+        if (isNaN(phongMoi.giaThue) || phongMoi.giaThue <= 0) {
+          return thongBaoLoi('Giá thuê phải là số dương.');
+        }
+        if (isNaN(phongMoi.dienTich) || phongMoi.dienTich <= 0) {
+          return thongBaoLoi('Diện tích phải là số dương.');
+        }
+        if (!/^(0|\+84)\d{9,10}$/.test(nguoiDang.soDienThoai)) {
+          return thongBaoLoi('Số điện thoại không hợp lệ (VD: 0912345678).');
+        }
+
+        const ds = layDanhSachPhong();
+        ds.push(phongMoi);
+        luuDanhSachPhong(ds);
+
+        hopThongBao.innerHTML = `
+          <div class="thong-bao thanh-cong">
+            ✅ Đăng tin thành công! 
+            <a href="chi-tiet.html?id=${phongMoi.idPhong}">Xem tin</a> • 
+            <a href="tim-tro.html">Tới trang Tìm trọ</a>
+          </div>`;
+        formDangTin.reset();
+      });
+
+      function thongBaoLoi(msg) {
+        document.getElementById('hop-thong-bao').innerHTML = `<div class="thong-bao loi">⚠️ ${msg}</div>`;
+      }
+    });
+  </script>
+</head>
+<body>
+<header class="thanh-dau">
+  <a class="logo" href="index.html">Nhà Trọ 36</a>
+  <nav>
+    <a href="index.html">Trang chủ</a>
+    <a href="tim-tro.html">Tìm trọ</a>
+    <a class="nut-dangtin" href="cho-thue.html" aria-current="page">Đăng tin</a>
+  </nav>
+</header>
+
+<main class="khung">
+  <h1>Đăng tin cho thuê</h1>
+  <div id="hop-thong-bao"></div>
+  <form id="form-dangtin" class="form-lon">
+    <label>Tiêu đề <input name="tieu-de" type="text" required minlength="10" maxlength="120" placeholder="Phòng trọ mới, có gác, gần ĐH..."></label>
+    <label>Mô tả <textarea name="mo-ta" rows="4" required placeholder="Mô tả ngắn gọn về phòng, nội thất, giờ giấc..."></textarea></label>
+    <div class="nhom-2">
+      <label>Giá thuê (đ/tháng) <input name="gia-thue" type="number" min="500000" step="50000" required></label>
+      <label>Diện tích (m²) <input name="dien-tich" type="number" min="8" step="1" required></label>
+    </div>
+    <label>Địa chỉ cụ thể <input name="dia-chi" type="text" required placeholder="Số nhà, tên đường..."></label>
+    <label>Khu vực (quận/huyện, tỉnh/thành) <input name="khu-vuc" type="text" required placeholder="VD: Q.9, TP.HCM"></label>
+    <label>Link hình ảnh (tùy chọn) <input name="hinh-anh" type="url" placeholder="https://..."></label>
+
+    <fieldset class="tien-nghi">
+      <legend>Tiện nghi</legend>
+      <label><input type="checkbox" name="tien-nghi" value="Máy lạnh"> Máy lạnh</label>
+      <label><input type="checkbox" name="tien-nghi" value="Máy giặt"> Máy giặt</label>
+      <label><input type="checkbox" name="tien-nghi" value="Giờ giấc tự do"> Giờ giấc tự do</label>
+      <label><input type="checkbox" name="tien-nghi" value="Cho nấu ăn"> Cho nấu ăn</label>
+      <label><input type="checkbox" name="tien-nghi" value="Chỗ để xe"> Chỗ để xe</label>
+    </fieldset>
+
+    <h3>Thông tin liên hệ</h3>
+    <div class="nhom-2">
+      <label>Họ tên <input name="ho-ten" type="text" required></label>
+      <label>Số điện thoại <input name="so-dien-thoai" type="tel" required pattern="(0|\+84)\d{9,10}" title="VD: 0912345678"></label>
+    </div>
+    <label>Email (tùy chọn) <input name="email" type="email" placeholder="ban@vidu.com"></label>
+
+    <div class="hanh-dong">
+      <button class="btn" type="submit">Đăng tin</button>
+      <a class="btn btn-ghost" href="index.html">Hủy</a>
+    </div>
+  </form>
+</main>
+
+<footer class="chan-trang">
+  <p>© Trọ 36</p>
+</footer>
+</body>
+</html>

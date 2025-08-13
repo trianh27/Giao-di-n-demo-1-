@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <title>Tìm trọ | Nhà Trọ 36</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script defer src="assets/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const formBoLoc = document.getElementById('form-boloc');
+      const oTuKhoa = document.getElementById('tu-khoa');
+      const oKhuVuc = document.getElementById('khu-vuc');
+      const oGiaMin = document.getElementById('gia-min');
+      const oGiaMax = document.getElementById('gia-max');
+      const oDienTichMin = document.getElementById('dt-min');
+      const oDienTichMax = document.getElementById('dt-max');
+      const khuKetQua = document.getElementById('ket-qua');
+
+      function taiKetQua() {
+        const ds = layDanhSachPhong();
+        const boLoc = {
+          tuKhoa: oTuKhoa.value.trim(),
+          khuVuc: oKhuVuc.value.trim(),
+          giaMin: Number(oGiaMin.value || 0),
+          giaMax: Number(oGiaMax.value || 0),
+          dienTichMin: Number(oDienTichMin.value || 0),
+          dienTichMax: Number(oDienTichMax.value || 0),
+        };
+        const ketQua = locPhongTheoNhuCau(ds, boLoc);
+        khuKetQua.innerHTML = ketQua.length
+          ? ketQua.map(taoThePhongLon).join('')
+          : `<p>Không tìm thấy kết quả phù hợp. Thử nới điều kiện hoặc <a href="cho-thue.html">đăng tin</a> nhé.</p>`;
+        document.getElementById('dem-kq').textContent = ketQua.length;
+      }
+
+      formBoLoc.addEventListener('submit', function (e) {
+        e.preventDefault(); // chặn reload trang
+        taiKetQua();
+      });
+
+      // Tải sẵn kết quả lần đầu
+      taiKetQua();
+    });
+  </script>
+</head>
+<body>
+<header class="thanh-dau">
+  <a class="logo" href="index.html">Nhà Trọ 36</a>
+  <nav>
+    <a href="index.html">Trang chủ</a>
+    <a href="tim-tro.html" aria-current="page">Tìm trọ</a>
+    <a class="nut-dangtin" href="cho-thue.html">Đăng tin</a>
+  </nav>
+</header>
+
+<main class="khung">
+  <h1>Tìm trọ</h1>
+  <form id="form-boloc" class="bo-loc">
+    <input id="tu-khoa" type="text" placeholder="Từ khóa: gần ĐH, có gác, full nội thất...">
+    <input id="khu-vuc" type="text" placeholder="Khu vực (quận/huyện, tỉnh/thành)">
+    <div class="nhom-2">
+      <input id="gia-min" type="number" min="0" placeholder="Giá tối thiểu (đ/tháng)">
+      <input id="gia-max" type="number" min="0" placeholder="Giá tối đa (đ/tháng)">
+    </div>
+    <div class="nhom-2">
+      <input id="dt-min" type="number" min="0" placeholder="Diện tích tối thiểu (m²)">
+      <input id="dt-max" type="number" min="0" placeholder="Diện tích tối đa (m²)">
+    </div>
+    <button class="btn" type="submit">Lọc kết quả</button>
+  </form>
+
+  <p class="dem-kq"><b><span id="dem-kq">0</span></b> kết quả</p>
+  <div id="ket-qua" class="luoi-phong"></div>
+</main>
+
+<footer class="chan-trang">
+  <p>© Trọ 36</p>
+</footer>
+</body>
+</html>

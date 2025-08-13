@@ -1,0 +1,202 @@
+:root{
+  --nen:#0f172a;        /* slate-900 */
+  --hop:#111827;        /* gray-900 */
+  --vien:#1f2937;       /* gray-800 */
+  --chu:#e5e7eb;        /* gray-200 */
+  --phu:#9ca3af;        /* gray-400 */
+  --nhan:#22c55e;       /* green-500 */
+  --nhan-hover:#16a34a;
+  --ghost:#334155;      /* slate-700 */
+  --do:#ef4444;
+}
+*{box-sizing:border-box}
+html,body{
+    margin:0;
+    padding:0;background:var(--nen);
+    color:var(--chu);
+    font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Helvetica,Arial
+}
+a{
+    color:#93c5fd;
+    text-decoration:none
+}
+a:hover{
+    text-decoration:underline
+}
+h1,h2,h3{
+    margin:0 0 .5rem 0
+}
+.khung{
+    max-width:1100px;
+    margin:0 auto;
+    padding:20px
+}
+.thanh-dau{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:14px 20px;
+    border-bottom:1px solid var(--vien);
+    position:sticky;
+    top:0;
+    background:rgba(15,23,42,.8);
+    backdrop-filter:saturate(150%) blur(6px);
+    z-index:10
+}
+.logo{
+    font-weight:700;
+    font-size:18px
+}
+nav a{margin-left:14px;
+    padding:8px 10px;
+    border-radius:8px
+}
+nav a[aria-current="page"]{background:var(--ghost)}
+.nut-dangtin{background:var(--nhan);
+    color:#062; 
+    font-weight:600
+}
+.nut-dangtin:hover{
+    background:var(--nhan-hover);
+    color:#021
+}
+.hero{
+    padding:40px;
+    border:1px solid var(--vien);
+    background:linear-gradient(180deg, #0b1227, #0f172a);
+    border-radius:16px;
+    margin:20px 0
+}
+.hero-actions .btn{margin-right:10px}
+.btn{display:inline-block;
+    background:var(--nhan);
+    color:#062;padding:10px 14px;
+    border-radius:10px;
+    font-weight:700;
+    border:none
+}
+.btn:hover{background:var(--nhan-hover)}
+.btn-ghost{
+    background:var(--ghost);
+    color:#e2e8f0
+}
+.btn-ghost:hover{filter:brightness(1.1)}
+.bo-loc,.form-lon{
+    display:grid;
+    gap:12px;
+    border:1px solid var(--vien);
+    padding:16px;
+    border-radius:12px;
+    background:var(--hop)
+}
+.nhom-2{display:grid;gap:12px;
+    grid-template-columns:repeat(2,1fr)
+}
+label{display:grid;
+    gap:6px;
+    font-size:14px
+}
+input,textarea,select{
+    background:#0b1220;
+    border:1px solid var(--vien);
+    color:var(--chu);
+    padding:10px;
+    border-radius:10px
+}
+input::placeholder,textarea::placeholder{color:var(--phu)}
+fieldset{
+    border:1px dashed var(--vien);
+    border-radius:10px;
+    padding:10px
+}
+.legend{color:var(--phu)}
+.dem-kq{
+    color:var(--phu);
+    margin:8px 0 16px
+}
+.luoi-phong{
+    display:grid;
+    gap:14px;
+    grid-template-columns:repeat(auto-fill,minmax(260px,1fr))
+}
+.phong{
+    border:1px solid var(--vien);
+    border-radius:12px;overflow:hidden;background:var(--hop)
+}
+.phong .anh{
+    width:100%;
+    height:160px;
+    object-fit:cover;
+    background:#0b1220
+}
+.phong .noi-dung{padding:12px}
+.phong .tieu-de{
+    font-weight:700;
+    margin-bottom:8px
+}
+.phong .phu{
+    color:var(--phu);
+    font-size:14px
+}
+.bai-chi-tiet{
+    display:grid;
+    gap:20px;
+    grid-template-columns:1.3fr 1fr
+}
+.anh-to{
+    width:100%;
+    height:100%;
+    max-height:520px;
+    object-fit:cover;
+    border:1px solid var(--vien);
+    border-radius:12px
+}
+.thong-tin{
+    display:grid;
+    gap:10px
+}
+.gia{font-weight:700}
+.tien-nghi{color:#a7f3d0}
+.lien-he{
+    border-top:1px solid var(--vien);
+    padding-top:10px
+}
+.hanh-dong{
+    display:flex;
+    gap:10px}
+.thong-bao{
+    padding:12px;
+    border-radius:10px;
+    margin-bottom:10px
+}
+.thong-bao.loi{
+    background:#3f1d1d;
+    border:1px solid #7f1d1d
+}
+.thong-bao.thanh-cong{
+    background:#112a1a;
+    border:1px solid #14532d
+}
+.uy-tin ul{
+    margin:0;
+    padding-left:18px
+}
+.hang-ngang {
+  display: flex;        
+  align-items: center;   
+  gap: 22px;              
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between; 
+  gap: 40px;                       
+  padding: 22px;
+}
+
+.cot ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+@media (max-width:900px){.bai-chi-tiet{grid-template-columns:1fr}}

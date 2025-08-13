@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8">
+  <title>Chi tiết | Nhà Trọ 36</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script defer src="assets/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const id = new URLSearchParams(location.search).get('id');
+      const ds = layDanhSachPhong();
+      const phong = ds.find(p => p.idPhong === id);
+
+      const khung = document.getElementById('noi-dung');
+      if (!phong) {
+        khung.innerHTML = `<div class="thong-bao loi">Không tìm thấy tin. <a href="tim-tro.html">Quay lại Tìm trọ</a></div>`;
+        return;
+      }
+
+      const hinh = phong.hinhAnh ? phong.hinhAnh : 'https://placehold.co/800x500?text=Phong+Tro';
+
+      let html = '';
+      html += '<article class="bai-chi-tiet">';
+      html += '  <img class="anh-to" src="' + hinh + '" alt="Hình phòng trọ">';
+      html += '  <div class="thong-tin">';
+      html += '    <h1>' + phong.tieuDe + '</h1>';
+      html += '    <p class="gia">💰 ' + phong.giaThue + ' đ/tháng • 📐 ' + phong.dienTich + ' m²</p>';
+      html += '    <p class="dia-chi">📍 ' + phong.diaChi + ' — ' + phong.khuVuc + '</p>';
+      html += '    <p>' + phong.moTa + '</p>';
+      html += '    <p class="tien-nghi">✨ ' + (phong.tienNghi.length ? phong.tienNghi.join(' • ') : '—') + '</p>';
+      html += '    <div class="lien-he">';
+      html += '      <h3>Liên hệ</h3>';
+      html += '      <p>👤 ' + phong.nguoiDang.hoTen + '</p>';
+      html += '      <p>📞 <a href="tel:' + phong.nguoiDang.soDienThoai + '">' + phong.nguoiDang.soDienThoai + '</a></p>';
+      if (phong.nguoiDang.email) {
+        html += '      <p>✉️ <a href="mailto:' + phong.nguoiDang.email + '">' + phong.nguoiDang.email + '</a></p>';
+      }
+      html += '    </div>';
+      html += '  </div>';
+      html += '</article>';
+
+      khung.innerHTML = html;
+
+    });
+  </script>
+</head>
+
+<body>
+  <header class="thanh-dau">
+    <a class="logo" href="index.html">Nhà Trọ 36</a>
+    <nav>
+      <a href="index.html">Trang chủ</a>
+      <a href="tim-tro.html">Tìm trọ</a>
+      <a class="nut-dangtin" href="cho-thue.html">Đăng tin</a>
+    </nav>
+  </header>
+
+  <main class="khung">
+    <div id="noi-dung"></div>
+  </main>
+
+  <footer class="chan-trang">
+    <p>© Trọ 36</p>
+  </footer>
+</body>
+
+</html>
